@@ -7,7 +7,8 @@ export function extractIngredients(recipe) {
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
 }
 
-async function displayFilterBtn(recipes){
+// Display buttons in the DOM
+function displayBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
     const btnModel = cardFactory(recipes);
 
@@ -23,15 +24,15 @@ async function displayFilterBtn(recipes){
         const btnDOM = btnModel.redBtn();
         filterSection.appendChild(btnDOM);          
     }
-
     blueBtn(); greenBtn(); redBtn();
 };
 
-function interactionsFilterBtn(){
-    const allMainButton = document.querySelectorAll('.button');
+// Interactions to open and close buttons
+function interactionsBtn(){
+    const allMainBtn = document.querySelectorAll('.button');
     const allIconUp = document.querySelectorAll('.fa-chevron-up');
-    
-    allMainButton.forEach(mainBtn => {
+        
+    allMainBtn.forEach(mainBtn => {
         const container = mainBtn.closest('.container');
         const searchBtn = container.querySelector('.input');
 
@@ -46,9 +47,10 @@ function interactionsFilterBtn(){
                 searchBtn.style.display = 'none';
             })
         })
-    }); 
+    });
 };
 
+// Display cards in the DOM
 async function displayData(recipes) {
     const cardSection = document.querySelector(".card_section");
     recipes.forEach((recipe) => {
@@ -59,8 +61,8 @@ async function displayData(recipes) {
 };
 
 // Buttons
-displayFilterBtn(recipes)
-interactionsFilterBtn()
+displayBtn(recipes);
+interactionsBtn();
 // Cards
-displayData(recipes)
+displayData(recipes);
 
