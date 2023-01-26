@@ -60,9 +60,41 @@ async function displayData(recipes) {
     });
 };
 
+async function filterRecipes(recipes){
+    const cardSection = document.querySelector(".card_section");
+    let allSearchBar = document.querySelectorAll('input');
+    let recipesFound
+    let search
+    
+    // Perform a search using the search bar 
+    allSearchBar.forEach(searchBar => {
+        searchBar.addEventListener('input', function(e){
+            search = searchBar.value.toLowerCase();
+
+            recipesFound = recipes.filter(recipe => {
+                const name = recipe.name.toLowerCase();
+                const description = recipe.description.toLowerCase();
+                return (
+                    name.includes(search) ||
+                    description.includes(search) ||
+                    recipe.ingredient.includes(search)
+                )
+            })
+            cardSection.innerHTML = "";
+            displayData(recipesFound);
+        })
+    });
+}
+
+
+
+
+
 // Buttons
 displayBtn(recipes);
 interactionsBtn();
 // Cards
 displayData(recipes);
+// Filter
+filterRecipes(recipes)
 
