@@ -70,9 +70,9 @@ async function noRecipesFound() {
     return (cardSection)
 }
 
-async function filterRecipes(recipes){
+async function filterRecipesWithSearchBar(recipes){
     let allSearchBar = document.querySelectorAll('input');
-    let recipesFound
+    let recipesFound = new Set()
     let search
     
     // Perform a search using the search bar 
@@ -90,12 +90,14 @@ async function filterRecipes(recipes){
                 )
             })
 
+            // Condition to launch the search from 3 characters entered
             if(search.length >= 3){
                 displayData(recipesFound);                
             }else{
                 displayData(recipes)
             }
 
+            // Condition to launch a message if no recipe is found
             if(!recipesFound.length){
                 noRecipesFound()
             }
@@ -109,5 +111,5 @@ interactionsBtn();
 // Cards
 displayData(recipes);
 // Filter
-filterRecipes(recipes)
+filterRecipesWithSearchBar(recipes)
 
