@@ -53,6 +53,7 @@ function interactionsBtn(){
 // Display cards in the DOM
 async function displayData(recipes) {
     const cardSection = document.querySelector(".card_section");
+    cardSection.innerHTML = "";
     recipes.forEach((recipe) => {
         const cardModel = cardFactory(recipe);
         const CardDOM = cardModel.getCardDOM();
@@ -60,8 +61,16 @@ async function displayData(recipes) {
     });
 };
 
-async function filterRecipes(recipes){
+async function noRecipesFound() {
     const cardSection = document.querySelector(".card_section");
+    const message = document.createElement('p');
+    message.innerHTML =`Aucune recette ne correspond à votre critère<br>Vous pouvez chercher « tarte aux pommes », « poisson », etc.`
+    message.setAttribute('class', 'search-null')
+    cardSection.appendChild(message)
+    return (cardSection)
+}
+
+async function filterRecipes(recipes){
     let allSearchBar = document.querySelectorAll('input');
     let recipesFound
     let search
@@ -80,15 +89,19 @@ async function filterRecipes(recipes){
                     recipe.ingredient.includes(search)
                 )
             })
-            cardSection.innerHTML = "";
-            displayData(recipesFound);
+
+            if(search.length >= 3){
+                displayData(recipesFound);                
+            }else{
+                displayData(recipes)
+            }
+
+            if(!recipesFound.length){
+                noRecipesFound()
+            }
         })
     });
 }
-
-
-
-
 
 // Buttons
 displayBtn(recipes);
