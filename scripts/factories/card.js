@@ -91,7 +91,7 @@ export function cardFactory(data) {
             alignBtn.setAttribute('class', 'align-inside-btn');
             iconUp.setAttribute('class', 'fas fa-chevron-up');
             input.setAttribute('placeholder', "Rechercher un ingrédient");
-            input.setAttribute('class', 'ingredients_input');
+            input.setAttribute('class', 'ingredients_input input');
             alignSearchList.setAttribute('class', 'align-ingredients-list element-list');
 
         // Display in page

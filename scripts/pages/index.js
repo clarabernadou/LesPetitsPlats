@@ -14,6 +14,19 @@ function extractAllIngredients(recipes) {
     return new Set(ingredients.flat())
 };
 
+function extractAllAppliances(recipes) {
+    let appliances = recipes.map(recipe => {
+        return recipe.appliance.toLowerCase()
+    })
+    return new Set(appliances.flat())
+};
+
+function extractAllUstensils(recipes) {
+    let ustensils = recipes.map(recipe => {
+        return recipe.ustensils.map(i => i.toLowerCase())
+    })
+    return new Set(ustensils.flat())
+};
 
 // Display buttons in the DOM
 function displayBtn(recipes){
@@ -58,6 +71,16 @@ function interactionsBtn(){
     });
 };
 
+// Display message when no recipes is found
+async function noRecipesFound() {
+    const cardSection = document.querySelector(".card_section");
+    const message = document.createElement('p');
+    message.innerHTML =`Aucune recette ne correspond à votre critère<br>Vous pouvez chercher « tarte aux pommes », « poisson », etc.`
+    message.setAttribute('class', 'search-null')
+    cardSection.appendChild(message)
+    return (cardSection)
+}
+
 // Display cards in the DOM
 async function displayData(recipes) {
     const cardSection = document.querySelector(".card_section");
@@ -68,16 +91,6 @@ async function displayData(recipes) {
         cardSection.appendChild(CardDOM);
     });
 };
-
-// Display message when no recipes is found
-async function noRecipesFound() {
-    const cardSection = document.querySelector(".card_section");
-    const message = document.createElement('p');
-    message.innerHTML =`Aucune recette ne correspond à votre critère<br>Vous pouvez chercher « tarte aux pommes », « poisson », etc.`
-    message.setAttribute('class', 'search-null')
-    cardSection.appendChild(message)
-    return (cardSection)
-}
 
 async function filterRecipesWithSearchBar(recipes){
     let searchBar = document.querySelector('.search_bar');
@@ -110,37 +123,60 @@ async function filterRecipesWithSearchBar(recipes){
             }
 
             // If we search for recipes in the search bar, the list of ingredients is modified
-            ingredientsListForTags(recipesFound)
+            ingredients(recipesFound);
+            appliances(recipesFound);
+            ustensils(recipesFound);
         })
 }
 
 // Filter the list of elements for tags
-async function ingredientsListForTags(recipes){
-    const searchBar = document.querySelector('.ingredients_input');
+async function elementsListForTags(searchBar, elements, elementsFound){
     const button = searchBar.closest('button');
     const elementsList = button.querySelector('.element-list');
 
-    // Retrieve all ingredients
-    let ingredients = extractAllIngredients(recipes);
-    let tagColor = '#3282F7';
-
     searchBar.addEventListener('input', function(e) {
         let search = searchBar.value.toLowerCase()
-        let ingredientsFound = new Set();
-
+        elementsFound = new Set();
+        
         // Add ingredients found in the set
-        ingredients.forEach(ingredient => {
-            if(ingredient.includes(search)){
-                ingredientsFound.add(ingredient)
+        elements.forEach(element => {
+            if(element.includes(search)){
+                elementsFound.add(element);
             }
-        }); 
+        });
 
         // Filter elements of tags when searching for an element
-        displayTagsElements(ingredientsFound, elementsList);
+        displayTagsElements(elementsFound, elementsList);
     })
     // Display original tag elements
-    displayTagsElements(ingredients, elementsList);
-    addTag(tagColor);
+    displayTagsElements(elements, elementsList);
+}
+
+// Ingredient information for tag elements
+function ingredients(recipes){
+    const searchBar = document.querySelector('.ingredients_input');
+    let ingredients = extractAllIngredients(recipes);
+    let ingredientsFound = new Set();
+    let tagId = 'ingredients';
+    elementsListForTags(searchBar, ingredients, ingredientsFound);
+}
+
+// Appliance information for tag elements
+function appliances(recipes){
+    const searchBar = document.querySelector('.appliances_input');
+    let appliances = extractAllAppliances(recipes);
+    let appliancesFound = new Set();
+    let tagId = 'appliances';
+    elementsListForTags(searchBar, appliances, appliancesFound);
+}
+
+// Ustensil information for tag elements
+function ustensils(recipes){
+    const searchBar = document.querySelector('.ustensils_input');
+    let ustensils = extractAllUstensils(recipes);
+    let ustensilsFound = new Set();
+    let tagId = 'ustensils';
+    elementsListForTags(searchBar, ustensils, ustensilsFound);
 }
 
 // Display elements for tags in DOM
@@ -151,34 +187,8 @@ async function displayTagsElements(elements, list){
         a.setAttribute('class', 'ingredient-in-list');
         a.textContent = element;
         list.appendChild(a);
-    })
+    });
 }
-
-async function addTag(tagColor){
-    const allElements = document.querySelectorAll('.ingredient-in-list');
-    allElements.forEach(element => {
-        element.addEventListener('click', function(e) {
-            displayTag(tagColor,element.text);
-        })
-    })
-}
-
-function displayTag(tagColor, tagContent) {
-    const tagSection = document.querySelector('.tag_section');
-    const tag = document.createElement('div');
-    const text = document.createElement('p');
-    const icon = document.createElement('i');
-    
-    tag.setAttribute('class', 'tag');
-    tag.style.backgroundColor = tagColor;
-    text.setAttribute('class', 'text-ingredient-tag');
-    text.textContent = tagContent; 
-    icon.setAttribute('class', 'far fa-times-circle');
-        
-    tag.appendChild(text);
-    tag.appendChild(icon);
-    tagSection.appendChild(tag);
-};
 
 // Buttons
 displayBtn(recipes);
@@ -187,5 +197,7 @@ interactionsBtn();
 displayData(recipes);
 // Search bar
 filterRecipesWithSearchBar(recipes);
-// Tags
-ingredientsListForTags(recipes);
+// Infos
+ingredients(recipes);
+appliances(recipes);
+ustensils(recipes);
