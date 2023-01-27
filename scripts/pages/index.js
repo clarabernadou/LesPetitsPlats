@@ -3,30 +3,51 @@ import { cardFactory } from '../factories/card.js';
 
 const { recipes } = await getRecipes();
 
-export function extractIngredients(recipe) {
+export function extractIngredients(recipe) { 
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
 }
 
 function extractAllIngredients(recipes) {
-    let ingredients = recipes.map(recipe => {
-        return recipe.ingredient.map(i => i.toLowerCase())
-    })
+    let ingredients = recipes.map(recipe => { return recipe.ingredient.map(i => i.toLowerCase()) })
     return new Set(ingredients.flat())
 };
 
 function extractAllAppliances(recipes) {
-    let appliances = recipes.map(recipe => {
-        return recipe.appliance.toLowerCase()
-    })
+    let appliances = recipes.map(recipe => { return recipe.appliance.toLowerCase() })
     return new Set(appliances.flat())
 };
 
 function extractAllUstensils(recipes) {
-    let ustensils = recipes.map(recipe => {
-        return recipe.ustensils.map(i => i.toLowerCase())
-    })
+    let ustensils = recipes.map(recipe => { return recipe.ustensils.map(i => i.toLowerCase()) })
     return new Set(ustensils.flat())
 };
+
+// Ingredient informations
+function ingredients(recipes){
+    const searchBar = document.querySelector('.ingredients_input');
+    let ingredients = extractAllIngredients(recipes);
+    let ingredientsFound = new Set();
+    let tagId = 'ingredients';
+    elementsListForTags(searchBar, ingredients, ingredientsFound);
+}
+
+// Appliance informations
+function appliances(recipes){
+    const searchBar = document.querySelector('.appliances_input');
+    let appliances = extractAllAppliances(recipes);
+    let appliancesFound = new Set();
+    let tagId = 'appliances';
+    elementsListForTags(searchBar, appliances, appliancesFound);
+}
+
+// Ustensil informations
+function ustensils(recipes){
+    const searchBar = document.querySelector('.ustensils_input');
+    let ustensils = extractAllUstensils(recipes);
+    let ustensilsFound = new Set();
+    let tagId = 'ustensils';
+    elementsListForTags(searchBar, ustensils, ustensilsFound);
+}
 
 // Display buttons in the DOM
 function displayBtn(recipes){
@@ -92,14 +113,13 @@ async function displayData(recipes) {
     });
 };
 
+// Search for recipes with the search bar
 async function filterRecipesWithSearchBar(recipes){
     let searchBar = document.querySelector('.search_bar');
     let recipesFound = new Set();
-
-    // Perform a search using the search bar 
+    
         searchBar.addEventListener('input', function(e){
             let search = searchBar.value.toLowerCase();
-            
             recipesFound = recipes.filter(recipe => {
                 const name = recipe.name.toLowerCase();
                 const description = recipe.description.toLowerCase();
@@ -122,7 +142,7 @@ async function filterRecipesWithSearchBar(recipes){
                 noRecipesFound()
             }
 
-            // If we search for recipes in the search bar, the list of ingredients is modified
+            // If we search for recipes in the search bar, the list of ingredients is filtered
             ingredients(recipesFound);
             appliances(recipesFound);
             ustensils(recipesFound);
@@ -137,50 +157,18 @@ async function elementsListForTags(searchBar, elements, elementsFound){
     searchBar.addEventListener('input', function(e) {
         let search = searchBar.value.toLowerCase()
         elementsFound = new Set();
-        
-        // Add ingredients found in the set
         elements.forEach(element => {
             if(element.includes(search)){
                 elementsFound.add(element);
             }
         });
-
-        // Filter elements of tags when searching for an element
-        displayTagsElements(elementsFound, elementsList);
-    })
-    // Display original tag elements
-    displayTagsElements(elements, elementsList);
-}
-
-// Ingredient information for tag elements
-function ingredients(recipes){
-    const searchBar = document.querySelector('.ingredients_input');
-    let ingredients = extractAllIngredients(recipes);
-    let ingredientsFound = new Set();
-    let tagId = 'ingredients';
-    elementsListForTags(searchBar, ingredients, ingredientsFound);
-}
-
-// Appliance information for tag elements
-function appliances(recipes){
-    const searchBar = document.querySelector('.appliances_input');
-    let appliances = extractAllAppliances(recipes);
-    let appliancesFound = new Set();
-    let tagId = 'appliances';
-    elementsListForTags(searchBar, appliances, appliancesFound);
-}
-
-// Ustensil information for tag elements
-function ustensils(recipes){
-    const searchBar = document.querySelector('.ustensils_input');
-    let ustensils = extractAllUstensils(recipes);
-    let ustensilsFound = new Set();
-    let tagId = 'ustensils';
-    elementsListForTags(searchBar, ustensils, ustensilsFound);
-}
+        displayElementsTagsInDOM(elementsFound, elementsList); // Filter elements of tags when searching for an element
+    });
+    displayElementsTagsInDOM(elements, elementsList); // Display the elements of the tags when they are not filtered
+};
 
 // Display elements for tags in DOM
-async function displayTagsElements(elements, list){
+async function displayElementsTagsInDOM(elements, list){
     list.innerHTML = '';
     elements.forEach(element => {
         const a = document.createElement('a');
@@ -188,7 +176,7 @@ async function displayTagsElements(elements, list){
         a.textContent = element;
         list.appendChild(a);
     });
-}
+};
 
 // Buttons
 displayBtn(recipes);
