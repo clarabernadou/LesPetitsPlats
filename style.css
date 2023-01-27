@@ -123,21 +123,15 @@ button h2 {
     background-color: #ED6454;
 }
 
-.ingredients_button,
-.appliances_button,
-.ustensils_button {
+.button{
     width: 170px;
 }
 
-.ingredients_input,
-.appliances_input,
-.ustensils_input {
+.input-btn {
     width: 100%;
 }
 
-.ingredients_input,
-.appliances_input,
-.ustensils_input,
+.input-btn,
 .ingredients_list,
 .appliances_list,
 .ustensils_list {
@@ -163,9 +157,7 @@ button h2 {
     width: 100%;
 }
 
-.ingredients_input,
-.appliances_input,
-.ustensils_input,
+.input-btn,
 .ingredients_list,
 .appliances_list,
 .ustensils_list {

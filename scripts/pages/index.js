@@ -7,6 +7,14 @@ export function extractIngredients(recipe) {
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
 }
 
+function extractAllIngredients(recipes) {
+    let ingredients = recipes.map(recipe => {
+        return recipe.ingredient.map(i => i.toLowerCase())
+    })
+    return new Set(ingredients.flat())
+};
+
+
 // Display buttons in the DOM
 function displayBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
@@ -34,7 +42,7 @@ function interactionsBtn(){
         
     allMainBtn.forEach(mainBtn => {
         const container = mainBtn.closest('.container');
-        const searchBtn = container.querySelector('.input');
+        const searchBtn = container.querySelector('.input-btn');
 
         mainBtn.addEventListener('click', function(e){
             mainBtn.style.display = 'none';
@@ -71,15 +79,13 @@ async function noRecipesFound() {
 }
 
 async function filterRecipesWithSearchBar(recipes){
-    let allSearchBar = document.querySelectorAll('input');
-    let recipesFound = new Set()
-    let search
-    
-    // Perform a search using the search bar 
-    allSearchBar.forEach(searchBar => {
-        searchBar.addEventListener('input', function(e){
-            search = searchBar.value.toLowerCase();
+    let searchBar = document.querySelector('.search_bar');
+    let recipesFound = new Set();
 
+    // Perform a search using the search bar 
+        searchBar.addEventListener('input', function(e){
+            let search = searchBar.value.toLowerCase();
+            
             recipesFound = recipes.filter(recipe => {
                 const name = recipe.name.toLowerCase();
                 const description = recipe.description.toLowerCase();
@@ -101,8 +107,48 @@ async function filterRecipesWithSearchBar(recipes){
             if(!recipesFound.length){
                 noRecipesFound()
             }
+
+            // If we search for recipes in the search bar, the list of ingredients is modified
+            ingredientsListForTags(recipesFound)
         })
-    });
+}
+
+// Filter the list of elements for tags
+async function ingredientsListForTags(recipes){
+    const searchBar = document.querySelector('.ingredients_input');
+    const button = searchBar.closest('button');
+    const elementsList = button.querySelector('.element-list');
+
+    // Retrieve all ingredients
+    let ingredients = extractAllIngredients(recipes);
+
+    searchBar.addEventListener('input', function(e) {
+        let search = searchBar.value.toLowerCase()
+        let ingredientsFound = new Set();
+
+        // Add ingredients found in the set
+        ingredients.forEach(ingredient => {
+            if(ingredient.includes(search)){
+                ingredientsFound.add(ingredient)
+            }
+        }); 
+
+        // Filter elements of tags when searching for an element
+        displayTagsElements(ingredientsFound, elementsList);
+    })
+    // Display original tag elements
+    displayTagsElements(ingredients, elementsList);
+}
+
+// Display elements for tags in DOM
+async function displayTagsElements(elements, list){
+    list.innerHTML = '';
+    elements.forEach(element => {
+        const a = document.createElement('a');
+        a.setAttribute('class', 'ingredient-in-list');
+        a.textContent = element
+        list.appendChild(a)
+    })
 }
 
 // Buttons
@@ -110,6 +156,7 @@ displayBtn(recipes);
 interactionsBtn();
 // Cards
 displayData(recipes);
-// Filter
-filterRecipesWithSearchBar(recipes)
-
+// Search bar
+filterRecipesWithSearchBar(recipes);
+// Tags
+ingredientsListForTags(recipes);
