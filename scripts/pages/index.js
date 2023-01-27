@@ -69,6 +69,7 @@ async function displayData(recipes) {
     });
 };
 
+// Display message when no recipes is found
 async function noRecipesFound() {
     const cardSection = document.querySelector(".card_section");
     const message = document.createElement('p');
@@ -121,6 +122,7 @@ async function ingredientsListForTags(recipes){
 
     // Retrieve all ingredients
     let ingredients = extractAllIngredients(recipes);
+    let tagColor = '#3282F7';
 
     searchBar.addEventListener('input', function(e) {
         let search = searchBar.value.toLowerCase()
@@ -138,6 +140,7 @@ async function ingredientsListForTags(recipes){
     })
     // Display original tag elements
     displayTagsElements(ingredients, elementsList);
+    addTag(tagColor);
 }
 
 // Display elements for tags in DOM
@@ -146,10 +149,36 @@ async function displayTagsElements(elements, list){
     elements.forEach(element => {
         const a = document.createElement('a');
         a.setAttribute('class', 'ingredient-in-list');
-        a.textContent = element
-        list.appendChild(a)
+        a.textContent = element;
+        list.appendChild(a);
     })
 }
+
+async function addTag(tagColor){
+    const allElements = document.querySelectorAll('.ingredient-in-list');
+    allElements.forEach(element => {
+        element.addEventListener('click', function(e) {
+            displayTag(tagColor,element.text);
+        })
+    })
+}
+
+function displayTag(tagColor, tagContent) {
+    const tagSection = document.querySelector('.tag_section');
+    const tag = document.createElement('div');
+    const text = document.createElement('p');
+    const icon = document.createElement('i');
+    
+    tag.setAttribute('class', 'tag');
+    tag.style.backgroundColor = tagColor;
+    text.setAttribute('class', 'text-ingredient-tag');
+    text.textContent = tagContent; 
+    icon.setAttribute('class', 'far fa-times-circle');
+        
+    tag.appendChild(text);
+    tag.appendChild(icon);
+    tagSection.appendChild(tag);
+};
 
 // Buttons
 displayBtn(recipes);
