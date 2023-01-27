@@ -80,18 +80,19 @@ export function cardFactory(data) {
         // Container
         container.setAttribute('class', 'container')        
             // Main button
-            button.setAttribute('class', 'ingredients ingredients_button button');
+            button.setAttribute('class', 'ingredients button');
             title.textContent = "Ingredients";
             iconDown.setAttribute('class', 'fas fa-chevron-down');  
             // Container for buttons
             containerDisplayNone.setAttribute('class', 'container_display_none');
 
             // Search bar
-            inputBtn.setAttribute('class', 'ingredients ingredients_input input');
+            inputBtn.setAttribute('class', 'ingredients input-btn');
             alignBtn.setAttribute('class', 'align-inside-btn');
             iconUp.setAttribute('class', 'fas fa-chevron-up');
             input.setAttribute('placeholder', "Rechercher un ingrédient");
-            alignSearchList.setAttribute('class', 'align-ingredients-list');
+            input.setAttribute('class', 'ingredients_input');
+            alignSearchList.setAttribute('class', 'align-ingredients-list element-list');
 
         // Display in page
         container.appendChild(button)
@@ -122,19 +123,19 @@ export function cardFactory(data) {
         // Container
         container.setAttribute('class', 'container')        
             // Main button
-            button.setAttribute('class', 'appliances appliances_button button');
+            button.setAttribute('class', 'appliances button');
             title.textContent = "Appareils";
             iconDown.setAttribute('class', 'fas fa-chevron-down');  
             // Container for buttons
             containerDisplayNone.setAttribute('class', 'container_display_none');
 
             // Search bar
-            inputBtn.setAttribute('class', 'appliances appliances_input input');
+            inputBtn.setAttribute('class', 'appliances input-btn');
             alignBtn.setAttribute('class', 'align-inside-btn');
             iconUp.setAttribute('class', 'fas fa-chevron-up');
             input.setAttribute('placeholder', "Rechercher un appareil");
-            input.setAttribute('class', 'appliances_search_input');
-            alignSearchList.setAttribute('class', 'align-appliances-list');
+            input.setAttribute('class', 'appliances_input input');
+            alignSearchList.setAttribute('class', 'align-appliances-list element-list');
 
         // Display in page
         container.appendChild(button)
@@ -165,19 +166,19 @@ export function cardFactory(data) {
         // Container
         container.setAttribute('class', 'container')        
             // Main button
-            button.setAttribute('class', 'ustensils ustensils_button button');
+            button.setAttribute('class', 'ustensils button');
             title.textContent = "Ustensiles";
             iconDown.setAttribute('class', 'fas fa-chevron-down');  
             // Container for buttons
             containerDisplayNone.setAttribute('class', 'container_display_none');
 
             // Search bar
-            inputBtn.setAttribute('class', 'ustensils ustensils_input input');
+            inputBtn.setAttribute('class', 'ustensils input-btn');
             alignBtn.setAttribute('class', 'align-inside-btn');
             iconUp.setAttribute('class', 'fas fa-chevron-up');
             input.setAttribute('placeholder', "Rechercher un ustensile");
-            input.setAttribute('class', 'ustensils_search_input');
-            alignSearchList.setAttribute('class', 'align-ustensils-list');
+            input.setAttribute('class', 'ustensils_input input');
+            alignSearchList.setAttribute('class', 'align-ustensils-list element-list');
 
         // Display in page
         container.appendChild(button)
