@@ -7,6 +7,10 @@ export function extractIngredients(recipe) {
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
 }
 
+export function extractUstensils(recipe) {
+    return recipe.ustensils.map(u => u.toLowerCase())
+}
+
 function extractAllIngredients(recipes) {
     let ingredients = recipes.map(recipe => { return recipe.ingredient.map(i => i.toLowerCase()) })
     return new Set(ingredients.flat())
@@ -26,24 +30,27 @@ function extractAllUstensils(recipes) {
 function retrieveIngredientInformation(recipes){
     const searchBar = document.querySelector('.ingredients_input')
     let ingredients = extractAllIngredients(recipes)
+    let tagClass = 'tag_ingredient'
     let tagColor = '#3282F7'
-    initTagItems(searchBar, ingredients, tagColor)
+    initTagItems(searchBar, ingredients, tagClass, tagColor)
 }
 
 // Appliance informations
 function retrieveApplianceInformation(recipes){
     const searchBar = document.querySelector('.appliances_input')
     let appliances = extractAllAppliances(recipes)
+    let tagClass = 'tag_appliance'
     let tagColor = '#68D9A4'
-    initTagItems(searchBar, appliances, tagColor)
+    initTagItems(searchBar, appliances, tagClass, tagColor)
 }
 
 // Ustensil informations
 function retrieveUstensilInformation(recipes){
     const searchBar = document.querySelector('.ustensils_input')
     let ustensils = extractAllUstensils(recipes)
+    let tagClass = 'tag_ustensil'
     let tagColor = '#ED6454'
-    initTagItems(searchBar, ustensils, tagColor)
+    initTagItems(searchBar, ustensils, tagClass, tagColor)
 }
 
 // Display buttons in the DOM
@@ -113,6 +120,12 @@ function displayData(recipes) {
 // Filter recipes with text search
 function filterRecipes(search) {
     let recipesFound = new Set()
+
+    let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
+    let tagsIngredient = Array.from(document.querySelectorAll(".tag_ingredient")).map(t => t.textContent.toLowerCase())
+    let tagsAppliances = Array.from(document.querySelectorAll(".tag_appliance")).map(t => t.textContent.toLowerCase())
+    let tagsUstensils = Array.from(document.querySelectorAll(".tag_ustensil")).map(t => t.textContent.toLowerCase())
+    
     recipesFound = recipes.filter(recipe => {
         const name = recipe.name.toLowerCase()
         const description = recipe.description.toLowerCase()
@@ -122,6 +135,20 @@ function filterRecipes(search) {
             recipe.ingredient.includes(search)
         )
     })
+
+    if(tags.length){
+        if(!recipesFound.length){
+            recipesFound = recipes
+        }
+        recipesFound = recipesFound.filter(recipe => {
+            let ustensils = extractUstensils(recipe)
+            return (
+                tagsIngredient.every(t => recipe.ingredient.includes(t)) &&
+                tagsAppliances.every(t => recipe.appliance.toLowerCase().includes(t)) &&
+                tagsUstensils.every(t => ustensils.includes(t))
+            )
+        })
+    }
     return recipesFound
 }
 
@@ -144,7 +171,7 @@ function initRecipes(recipes){
             noRecipesFound()
         }
 
-        // If we search for recipes in the search bar, the list of ingredients is filtered
+        // If we search recipes, the list of ingredients is filtered
         retrieveIngredientInformation(recipesFound)
         retrieveApplianceInformation(recipesFound)
         retrieveUstensilInformation(recipesFound)
@@ -162,14 +189,14 @@ function filterTagItems(elements, search, elementsList){
     displayTagItemsInDOM(elementsFound, elementsList) // Filter elements of tags when searching for an element
 }
 
-function initTagItems(searchBar, elements, tagColor){
+function initTagItems(searchBar, elements, tagClass, tagColor){
     const elementsList = searchBar.closest('button').querySelector('.element-list')
     searchBar.addEventListener('input', function(e){
         let search = searchBar.value.toLowerCase()
         filterTagItems(elements, search, elementsList)
     })
     displayTagItemsInDOM(elements, elementsList) // Display the elements of the tags when they are not filtered
-    initTag(elementsList, tagColor)
+    initTag(elementsList, tagClass, tagColor)
 }
 
 // Display elements for tags in DOM
@@ -183,13 +210,14 @@ function displayTagItemsInDOM(elements, list){
     })
 }
 
-function displayTagInDOM(tagColor, tagContent) {
+// Display tag in DOM
+function displayTagInDOM(tagClass, tagColor, tagContent) {
     const tagSection = document.querySelector('.tag_section');
     const tag = document.createElement('div');
     const text = document.createElement('p');
     const icon = document.createElement('i');
                         
-    tag.setAttribute('class', `tag`);
+    tag.setAttribute('class', `tag ${tagClass}`);
     tag.style.backgroundColor = tagColor;
     text.setAttribute('class', 'text-ingredient-tag');
     text.textContent = tagContent; 
@@ -200,11 +228,19 @@ function displayTagInDOM(tagColor, tagContent) {
     tagSection.appendChild(tag);
 }
 
-function initTag(list, tagColor) {
+function initTag(list, tagClass, tagColor) {
     const elementsInList = list.querySelectorAll('.element-in-list')
     elementsInList.forEach(element => {
         element.addEventListener('click', function(e){
-            displayTagInDOM(tagColor, element.text)
+            displayTagInDOM(tagClass, tagColor, element.text)
+
+            let recipesFound = filterRecipes()
+            displayData(recipesFound)
+
+            // If we search recipes, the list of ingredients is filtered
+            retrieveIngredientInformation(recipesFound)
+            retrieveApplianceInformation(recipesFound)
+            retrieveUstensilInformation(recipesFound)
         })
     })
 }
