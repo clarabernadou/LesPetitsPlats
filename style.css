@@ -173,9 +173,7 @@ button h2 {
     width: 100%;
 }
 
-.ingredient-in-list,
-.appliances-in-list,
-.ustensils-in-list {
+.element-in-list {
     display: block;
 }
 
