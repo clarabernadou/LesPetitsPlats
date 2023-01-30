@@ -183,6 +183,7 @@ function displayTagItemsInDOM(elements, list){
     })
 }
 
+// Display tag in DOM
 function displayTagInDOM(tagColor, tagContent) {
     const tagSection = document.querySelector('.tag_section');
     const tag = document.createElement('div');
