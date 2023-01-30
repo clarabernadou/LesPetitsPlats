@@ -26,21 +26,21 @@ function extractAllUstensils(recipes) {
 function retrieveIngredientInformation(recipes){
     const searchBar = document.querySelector('.ingredients_input')
     let ingredients = extractAllIngredients(recipes)
-    filterTagItems(searchBar, ingredients)
+    initTagItems(searchBar, ingredients)
 }
 
 // Appliance informations
 function retrieveApplianceInformation(recipes){
     const searchBar = document.querySelector('.appliances_input')
     let appliances = extractAllAppliances(recipes)
-    filterTagItems(searchBar, appliances)
+    initTagItems(searchBar, appliances)
 }
 
 // Ustensil informations
 function retrieveUstensilInformation(recipes){
     const searchBar = document.querySelector('.ustensils_input')
     let ustensils = extractAllUstensils(recipes)
-    filterTagItems(searchBar, ustensils)
+    initTagItems(searchBar, ustensils)
 }
 
 // Display buttons in the DOM
@@ -107,6 +107,7 @@ function displayData(recipes) {
     })
 }
 
+// Filter recipes with text search
 function filterRecipes(search) {
     let recipesFound = new Set()
     recipesFound = recipes.filter(recipe => {
@@ -121,8 +122,7 @@ function filterRecipes(search) {
     return recipesFound
 }
 
-// Search for recipes with the search bar
-function initFilterRecipes(recipes){
+function initRecipes(recipes){
     let searchBar = document.querySelector('.search_bar')
 
     searchBar.addEventListener('input', function(e){
@@ -149,19 +149,21 @@ function initFilterRecipes(recipes){
 }
 
 // Filter the list of elements for tags
-function filterTagItems(searchBar, elements){
-    const button = searchBar.closest('button')
-    const elementsList = button.querySelector('.element-list')
+function filterTagItems(elements, search, elementsList){
+    let elementsFound = new Set()
+    elements.forEach(element => {
+        if(element.includes(search)){
+            elementsFound.add(element)
+        }
+    })
+    displayTagItemsInTheDOM(elementsFound, elementsList) // Filter elements of tags when searching for an element
+}
 
+function initTagItems(searchBar, elements){
+    const elementsList = searchBar.closest('button').querySelector('.element-list')
     searchBar.addEventListener('input', function(e) {
         let search = searchBar.value.toLowerCase()
-        let elementsFound = new Set()
-        elements.forEach(element => {
-            if(element.includes(search)){
-                elementsFound.add(element)
-            }
-        })
-        displayTagItemsInTheDOM(elementsFound, elementsList) // Filter elements of tags when searching for an element
+        filterTagItems(elements, search, elementsList)
     })
     displayTagItemsInTheDOM(elements, elementsList) // Display the elements of the tags when they are not filtered
 }
@@ -183,7 +185,7 @@ setSearchEvent()
 // Cards
 displayData(recipes)
 // Search bar
-initFilterRecipes(recipes)
+initRecipes(recipes)
 // Infos
 retrieveIngredientInformation(recipes)
 retrieveApplianceInformation(recipes)
