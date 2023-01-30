@@ -26,21 +26,24 @@ function extractAllUstensils(recipes) {
 function retrieveIngredientInformation(recipes){
     const searchBar = document.querySelector('.ingredients_input')
     let ingredients = extractAllIngredients(recipes)
-    initTagItems(searchBar, ingredients)
+    let tagColor = '#3282F7'
+    initTagItems(searchBar, ingredients, tagColor)
 }
 
 // Appliance informations
 function retrieveApplianceInformation(recipes){
     const searchBar = document.querySelector('.appliances_input')
     let appliances = extractAllAppliances(recipes)
-    initTagItems(searchBar, appliances)
+    let tagColor = '#68D9A4'
+    initTagItems(searchBar, appliances, tagColor)
 }
 
 // Ustensil informations
 function retrieveUstensilInformation(recipes){
     const searchBar = document.querySelector('.ustensils_input')
     let ustensils = extractAllUstensils(recipes)
-    initTagItems(searchBar, ustensils)
+    let tagColor = '#ED6454'
+    initTagItems(searchBar, ustensils, tagColor)
 }
 
 // Display buttons in the DOM
@@ -156,26 +159,53 @@ function filterTagItems(elements, search, elementsList){
             elementsFound.add(element)
         }
     })
-    displayTagItemsInTheDOM(elementsFound, elementsList) // Filter elements of tags when searching for an element
+    displayTagItemsInDOM(elementsFound, elementsList) // Filter elements of tags when searching for an element
 }
 
-function initTagItems(searchBar, elements){
+function initTagItems(searchBar, elements, tagColor){
     const elementsList = searchBar.closest('button').querySelector('.element-list')
-    searchBar.addEventListener('input', function(e) {
+    searchBar.addEventListener('input', function(e){
         let search = searchBar.value.toLowerCase()
         filterTagItems(elements, search, elementsList)
     })
-    displayTagItemsInTheDOM(elements, elementsList) // Display the elements of the tags when they are not filtered
+    displayTagItemsInDOM(elements, elementsList) // Display the elements of the tags when they are not filtered
+    initTag(elementsList, tagColor)
 }
 
 // Display elements for tags in DOM
-function displayTagItemsInTheDOM(elements, list){
+function displayTagItemsInDOM(elements, list){
     list.innerHTML = ''
     elements.forEach(element => {
         const a = document.createElement('a')
-        a.setAttribute('class', 'ingredient-in-list')
+        a.setAttribute('class', 'element-in-list')
         a.textContent = element
         list.appendChild(a)
+    })
+}
+
+function displayTagInDOM(tagColor, tagContent) {
+    const tagSection = document.querySelector('.tag_section');
+    const tag = document.createElement('div');
+    const text = document.createElement('p');
+    const icon = document.createElement('i');
+                        
+    tag.setAttribute('class', `tag`);
+    tag.style.backgroundColor = tagColor;
+    text.setAttribute('class', 'text-ingredient-tag');
+    text.textContent = tagContent; 
+    icon.setAttribute('class', 'far fa-times-circle');
+        
+    tag.appendChild(text);
+    tag.appendChild(icon);
+    tagSection.appendChild(tag);
+}
+
+function initTag(list, tagColor) {
+    const elementsInList = list.querySelectorAll('.element-in-list')
+    elementsInList.forEach(element => {
+        element.addEventListener('click', function(e){
+            displayTagInDOM(tagColor, element.text)
+        })
     })
 }
 
