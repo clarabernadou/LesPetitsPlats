@@ -23,30 +23,30 @@ function extractAllUstensils(recipes) {
 };
 
 // Ingredient informations
-function ingredients(recipes){
+function retrieveIngredientInformation(recipes){
     const searchBar = document.querySelector('.ingredients_input');
     let ingredients = extractAllIngredients(recipes);
     let ingredientsFound = new Set();
     let tagId = 'ingredients';
-    elementsListForTags(searchBar, ingredients, ingredientsFound);
+    filterTagItems(searchBar, ingredients, ingredientsFound);
 }
 
 // Appliance informations
-function appliances(recipes){
+function retrieveApplianceInformation(recipes){
     const searchBar = document.querySelector('.appliances_input');
     let appliances = extractAllAppliances(recipes);
     let appliancesFound = new Set();
     let tagId = 'appliances';
-    elementsListForTags(searchBar, appliances, appliancesFound);
+    filterTagItems(searchBar, appliances, appliancesFound);
 }
 
 // Ustensil informations
-function ustensils(recipes){
+function retrieveUstensilInformation(recipes){
     const searchBar = document.querySelector('.ustensils_input');
     let ustensils = extractAllUstensils(recipes);
     let ustensilsFound = new Set();
     let tagId = 'ustensils';
-    elementsListForTags(searchBar, ustensils, ustensilsFound);
+    filterTagItems(searchBar, ustensils, ustensilsFound);
 }
 
 // Display buttons in the DOM
@@ -143,14 +143,14 @@ async function filterRecipesWithSearchBar(recipes){
             }
 
             // If we search for recipes in the search bar, the list of ingredients is filtered
-            ingredients(recipesFound);
-            appliances(recipesFound);
-            ustensils(recipesFound);
+            retrieveIngredientInformation(recipesFound);
+            retrieveApplianceInformation(recipesFound);
+            retrieveUstensilInformation(recipesFound);
         })
 }
 
 // Filter the list of elements for tags
-async function elementsListForTags(searchBar, elements, elementsFound){
+async function filterTagItems(searchBar, elements, elementsFound){
     const button = searchBar.closest('button');
     const elementsList = button.querySelector('.element-list');
 
@@ -162,13 +162,13 @@ async function elementsListForTags(searchBar, elements, elementsFound){
                 elementsFound.add(element);
             }
         });
-        displayElementsTagsInDOM(elementsFound, elementsList); // Filter elements of tags when searching for an element
+        displayTagItemsInTheDOM(elementsFound, elementsList); // Filter elements of tags when searching for an element
     });
-    displayElementsTagsInDOM(elements, elementsList); // Display the elements of the tags when they are not filtered
+    displayTagItemsInTheDOM(elements, elementsList); // Display the elements of the tags when they are not filtered
 };
 
 // Display elements for tags in DOM
-async function displayElementsTagsInDOM(elements, list){
+async function displayTagItemsInTheDOM(elements, list){
     list.innerHTML = '';
     elements.forEach(element => {
         const a = document.createElement('a');
@@ -186,6 +186,6 @@ displayData(recipes);
 // Search bar
 filterRecipesWithSearchBar(recipes);
 // Infos
-ingredients(recipes);
-appliances(recipes);
-ustensils(recipes);
+retrieveIngredientInformation(recipes);
+retrieveApplianceInformation(recipes);
+retrieveUstensilInformation(recipes);
