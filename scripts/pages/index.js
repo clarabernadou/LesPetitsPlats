@@ -107,6 +107,7 @@ function displayData(recipes) {
     })
 }
 
+// Filter recipes with text search
 function filterRecipes(search) {
     let recipesFound = new Set()
     recipesFound = recipes.filter(recipe => {
@@ -121,7 +122,6 @@ function filterRecipes(search) {
     return recipesFound
 }
 
-// Search for recipes with the search bar
 function initFilterRecipes(recipes){
     let searchBar = document.querySelector('.search_bar')
 
