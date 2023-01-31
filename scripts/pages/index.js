@@ -120,12 +120,15 @@ function displayData(recipes) {
 // Filter recipes with text search
 function filterRecipes(search) {
     let recipesFound = new Set()
-
     let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
     let tagsIngredient = Array.from(document.querySelectorAll(".tag_ingredient")).map(t => t.textContent.toLowerCase())
     let tagsAppliances = Array.from(document.querySelectorAll(".tag_appliance")).map(t => t.textContent.toLowerCase())
     let tagsUstensils = Array.from(document.querySelectorAll(".tag_ustensil")).map(t => t.textContent.toLowerCase())
-    
+
+    if(!tags.length && search == undefined){
+        return recipes
+    }
+        
     recipesFound = recipes.filter(recipe => {
         const name = recipe.name.toLowerCase()
         const description = recipe.description.toLowerCase()
@@ -137,9 +140,7 @@ function filterRecipes(search) {
     })
 
     if(tags.length){
-        if(!recipesFound.length){
-            recipesFound = recipes
-        }
+        console.log(recipesFound);
         recipesFound = recipesFound.filter(recipe => {
             let ustensils = extractUstensils(recipe)
             return (
@@ -147,21 +148,29 @@ function filterRecipes(search) {
                 tagsAppliances.every(t => recipe.appliance.toLowerCase().includes(t)) &&
                 tagsUstensils.every(t => ustensils.includes(t))
             )
-        })
+        })        
     }
+
+    console.log(recipesFound)
     return recipesFound
 }
 
 function initRecipes(recipes){
     let searchBar = document.querySelector('.search_bar')
+    const tagSection = document.querySelector('.tag_section')
 
     searchBar.addEventListener('input', function(e){
         let search = searchBar.value.toLowerCase()
         let recipesFound = filterRecipes(search)
 
+        // Condition to remove tags
+        if(search.length){
+            tagSection.innerHTML = ''
+        }
+
         // Condition to launch the search from 3 characters entered
         if(search.length >= 3){
-            displayData(recipesFound)  
+            displayData(recipesFound)
         }else{
             displayData(recipes)
         }
@@ -233,6 +242,26 @@ function initTag(list, tagClass, tagColor) {
     elementsInList.forEach(element => {
         element.addEventListener('click', function(e){
             displayTagInDOM(tagClass, tagColor, element.text)
+            removeTag()
+
+            let recipesFound = filterRecipes()
+            displayData(recipesFound)
+
+            // If we search recipes, the list of ingredients is filtered
+            retrieveIngredientInformation(recipesFound)
+            retrieveApplianceInformation(recipesFound)
+            retrieveUstensilInformation(recipesFound)
+        })
+    })
+}
+
+// Remove tag in DOM
+function removeTag(){
+    const allCloseIcon = document.querySelectorAll('.fa-times-circle')
+    allCloseIcon.forEach(closeIcon => {
+        closeIcon.addEventListener('click', function(e){
+            const closeBtn = closeIcon.closest('.tag')
+            closeBtn.remove()
 
             let recipesFound = filterRecipes()
             displayData(recipesFound)
