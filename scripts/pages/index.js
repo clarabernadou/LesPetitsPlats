@@ -118,7 +118,10 @@ function displayData(recipes) {
 }
 
 // Filter recipes with text search
-function filterRecipes(search) {
+function filterRecipes() {
+    let searchBar = document.querySelector('.search_bar')
+    let search = searchBar.value.toLowerCase()
+
     let recipesFound = new Set()
     let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
     let tagsIngredient = Array.from(document.querySelectorAll(".tag_ingredient")).map(t => t.textContent.toLowerCase())
@@ -140,7 +143,7 @@ function filterRecipes(search) {
     })
 
     if(tags.length){
-        console.log(recipesFound);
+        if(!tags.length){ return recipes }
         recipesFound = recipesFound.filter(recipe => {
             let ustensils = extractUstensils(recipe)
             return (
@@ -148,12 +151,13 @@ function filterRecipes(search) {
                 tagsAppliances.every(t => recipe.appliance.toLowerCase().includes(t)) &&
                 tagsUstensils.every(t => ustensils.includes(t))
             )
-        })        
+        })         
     }
 
     console.log(recipesFound)
     return recipesFound
 }
+
 
 function initRecipes(recipes){
     let searchBar = document.querySelector('.search_bar')
@@ -161,11 +165,12 @@ function initRecipes(recipes){
 
     searchBar.addEventListener('input', function(e){
         let search = searchBar.value.toLowerCase()
-        let recipesFound = filterRecipes(search)
+        let recipesFound = filterRecipes()
 
         // Condition to remove tags
         if(search.length){
             tagSection.innerHTML = ''
+            displayData(recipesFound)
         }
 
         // Condition to launch the search from 3 characters entered
