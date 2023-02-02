@@ -229,6 +229,7 @@ function initTagItems(searchBar, elements, tagClass, tagColor){
 
 // Display elements for tags in DOM
 function displayTagItemsInDOM(elements, list){
+    let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
     list.innerHTML = ''
     let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
     elements.forEach(element => {
