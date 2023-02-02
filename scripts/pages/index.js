@@ -208,6 +208,7 @@ function initTagItems(searchBar, elements, tagClass, tagColor){
     searchBar.addEventListener('input', function(e){
         let search = searchBar.value.toLowerCase()
         filterTagItems(elements, search, elementsList)
+        initTag(elementsList, tagClass, tagColor)
     })
     displayTagItemsInDOM(elements, elementsList) // Display the elements of the tags when they are not filtered
     initTag(elementsList, tagClass, tagColor)
@@ -216,11 +217,16 @@ function initTagItems(searchBar, elements, tagClass, tagColor){
 // Display elements for tags in DOM
 function displayTagItemsInDOM(elements, list){
     list.innerHTML = ''
+    let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
     elements.forEach(element => {
-        const a = document.createElement('a')
-        a.setAttribute('class', 'element-in-list')
-        a.textContent = element
-        list.appendChild(a)
+        if(tags.includes(element)){
+            console.log('This tag is already in use');
+        }else{
+            const a = document.createElement('a')
+            a.setAttribute('class', 'element-in-list')
+            a.textContent = element
+            list.appendChild(a)            
+        }
     })
 }
 
