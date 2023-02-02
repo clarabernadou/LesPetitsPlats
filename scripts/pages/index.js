@@ -122,7 +122,8 @@ function filterRecipes() {
     let searchBar = document.querySelector('.search_bar')
     let search = searchBar.value.toLowerCase()
 
-    let recipesFound = new Set()
+    let recipesFound = []
+
     let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
     let tagsIngredient = Array.from(document.querySelectorAll(".tag_ingredient")).map(t => t.textContent.toLowerCase())
     let tagsAppliances = Array.from(document.querySelectorAll(".tag_appliance")).map(t => t.textContent.toLowerCase())
@@ -131,33 +132,45 @@ function filterRecipes() {
     if(!tags.length && search == undefined){
         return recipes
     }
-        
-    recipesFound = recipes.filter(recipe => {
+
+    for(let recipe of recipes){
         const name = recipe.name.toLowerCase()
         const description = recipe.description.toLowerCase()
-        return (
-            name.includes(search) ||
-            description.includes(search) ||
-            recipe.ingredient.includes(search)
-        )
-    })
+        if(name.indexOf(search) >= 0 || description.indexOf(search) >= 0 || recipe.ingredient.indexOf(search) >= 0){
+            recipesFound.push(recipe)
+        }       
+    }
+
+    let tagIngredient ; for(let t of tagsIngredient){ tagIngredient = t }
+    let tagAppliance ; for(let t of tagsAppliances){ tagAppliance = t }
+    let tagUstensil ; for(let t of tagsUstensils){ tagUstensil = t }
 
     if(tags.length){
-        if(!tags.length){ return recipes }
         recipesFound = recipesFound.filter(recipe => {
-            let ustensils = extractUstensils(recipe)
-            return (
-                tagsIngredient.every(t => recipe.ingredient.includes(t)) &&
-                tagsAppliances.every(t => recipe.appliance.toLowerCase().includes(t)) &&
-                tagsUstensils.every(t => ustensils.includes(t))
-            )
+            const ingredient = recipe.ingredient
+            const appliance = recipe.appliance.toLowerCase()
+            const ustensil = extractUstensils(recipe)
+
+            if(tags.length > 1){
+                if(
+                    (ingredient.indexOf(tagIngredient) >= 0 && appliance.toLowerCase().indexOf(tagAppliance) >= 0 && ustensil.indexOf(tagUstensil) >= 0) ||
+                    (ingredient.indexOf(tagIngredient) >= 0 && appliance.toLowerCase().indexOf(tagAppliance) >= 0) ||
+                    (appliance.toLowerCase().indexOf(tagAppliance) >= 0 && ustensil.indexOf(tagUstensil) >= 0) ||
+                    (ingredient.indexOf(tagIngredient) >= 0 && ustensil.indexOf(tagUstensil) >= 0)
+                ){
+                    return recipe
+                }
+            }else{
+                if(ingredient.indexOf(tagIngredient) >= 0 || appliance.toLowerCase().indexOf(tagAppliance) >= 0 || ustensil.indexOf(tagUstensil) >= 0){
+                    return recipe
+                }                
+            }
         })         
     }
 
     console.log(recipesFound)
     return recipesFound
 }
-
 
 function initRecipes(recipes){
     let searchBar = document.querySelector('.search_bar')
@@ -208,6 +221,7 @@ function initTagItems(searchBar, elements, tagClass, tagColor){
     searchBar.addEventListener('input', function(e){
         let search = searchBar.value.toLowerCase()
         filterTagItems(elements, search, elementsList)
+        initTag(elementsList, tagClass, tagColor)
     })
     displayTagItemsInDOM(elements, elementsList) // Display the elements of the tags when they are not filtered
     initTag(elementsList, tagClass, tagColor)
