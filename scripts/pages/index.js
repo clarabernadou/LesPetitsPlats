@@ -229,12 +229,17 @@ function initTagItems(searchBar, elements, tagClass, tagColor){
 
 // Display elements for tags in DOM
 function displayTagItemsInDOM(elements, list){
+    let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
     list.innerHTML = ''
     elements.forEach(element => {
-        const a = document.createElement('a')
-        a.setAttribute('class', 'element-in-list')
-        a.textContent = element
-        list.appendChild(a)
+        if(tags.includes(element)){
+            console.log('This tag is already in use');
+        }else{
+            const a = document.createElement('a')
+            a.setAttribute('class', 'element-in-list')
+            a.textContent = element
+            list.appendChild(a)            
+        }
     })
 }
 
