@@ -179,10 +179,12 @@ function filterRecipes() {
         }
     }
 
+    // If there are tags, put the result of keepRecipes in recipesFound to display it.
     if(tags.length){
         recipesFound = keptRecipes        
     }
 
+    // return recipes
     return recipesFound
 }
 
