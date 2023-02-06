@@ -179,7 +179,10 @@ function filterRecipes() {
         }
     }
 
-    recipesFound = keptRecipes
+    if(tags.length){
+        recipesFound = keptRecipes        
+    }
+
     return recipesFound
 }
 
