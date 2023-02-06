@@ -129,10 +129,12 @@ function filterRecipes() {
     let tagsAppliances = Array.from(document.querySelectorAll(".tag_appliance")).map(t => t.textContent.toLowerCase())
     let tagsUstensils = Array.from(document.querySelectorAll(".tag_ustensil")).map(t => t.textContent.toLowerCase())
 
+    // If there is no search or tag
     if(!tags.length && search == undefined){
         return recipes
     }
 
+    // Filter recipes with a search
     for(let recipe of recipes){
         const name = recipe.name.toLowerCase()
         const description = recipe.description.toLowerCase()
@@ -141,34 +143,43 @@ function filterRecipes() {
         }       
     }
 
-    let tagIngredient ; for(let t of tagsIngredient){ tagIngredient = t }
-    let tagAppliance ; for(let t of tagsAppliances){ tagAppliance = t }
-    let tagUstensil ; for(let t of tagsUstensils){ tagUstensil = t }
-
-    if(tags.length){
-        recipesFound = recipesFound.filter(recipe => {
-            const ingredient = recipe.ingredient
-            const appliance = recipe.appliance.toLowerCase()
-            const ustensil = extractUstensils(recipe)
-
-            if(tags.length > 1){
-                if(
-                    (ingredient.indexOf(tagIngredient) >= 0 && appliance.toLowerCase().indexOf(tagAppliance) >= 0 && ustensil.indexOf(tagUstensil) >= 0) ||
-                    (ingredient.indexOf(tagIngredient) >= 0 && appliance.toLowerCase().indexOf(tagAppliance) >= 0) ||
-                    (appliance.toLowerCase().indexOf(tagAppliance) >= 0 && ustensil.indexOf(tagUstensil) >= 0) ||
-                    (ingredient.indexOf(tagIngredient) >= 0 && ustensil.indexOf(tagUstensil) >= 0)
-                ){
-                    return recipe
-                }
-            }else{
-                if(ingredient.indexOf(tagIngredient) >= 0 || appliance.toLowerCase().indexOf(tagAppliance) >= 0 || ustensil.indexOf(tagUstensil) >= 0){
-                    return recipe
-                }                
-            }
-        })         
+    // Iterate on each element of the list
+    function customEvery(list, fn, recipeList){
+        let responses = []
+    
+        for(let element of list){
+            let rlt = fn(recipeList, element)
+            responses.push(rlt)
+        }
+    
+        for(let r of responses){
+            if(!r){ return false }
+        }
+        return true
     }
 
-    console.log(recipesFound)
+    // Do the elements appear in the recipes ?
+    function isInList(list, element){
+        if(list.indexOf(element) >= 0){ return true }
+        return false
+    }
+
+    let keptRecipes = []
+
+    // Filter recipes with tags
+    for(let recipe of recipes){
+        const ustensil = extractUstensils(recipe)
+
+        const keepRecipeIngredients = customEvery(tagsIngredient, isInList, recipe.ingredient)
+        const keepRecipeAppliances = customEvery(tagsAppliances, isInList, recipe.appliance.toLowerCase())
+        const keepRecipeUstensils = customEvery(tagsUstensils, isInList, ustensil)
+
+        if(keepRecipeIngredients && keepRecipeAppliances && keepRecipeUstensils){
+            keptRecipes.push(recipe)
+        }
+    }
+
+    recipesFound = keptRecipes
     return recipesFound
 }
 
