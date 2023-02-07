@@ -124,10 +124,10 @@ function filterRecipes() {
 
     let recipesFound = []
 
-    let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
-    let tagsIngredient = Array.from(document.querySelectorAll(".tag_ingredient")).map(t => t.textContent.toLowerCase())
-    let tagsAppliances = Array.from(document.querySelectorAll(".tag_appliance")).map(t => t.textContent.toLowerCase())
-    let tagsUstensils = Array.from(document.querySelectorAll(".tag_ustensil")).map(t => t.textContent.toLowerCase())
+    let tags = Array.from(document.querySelectorAll(".tag"))
+    let tagsIngredient = Array.from(document.querySelectorAll(".tag_ingredient"))
+    let tagsAppliances = Array.from(document.querySelectorAll(".tag_appliance"))
+    let tagsUstensils = Array.from(document.querySelectorAll(".tag_ustensil"))
 
     // If there is no search or tag
     if(!tags.length && search == undefined){
@@ -148,7 +148,7 @@ function filterRecipes() {
         let responses = []
     
         for(let element of list){
-            let rlt = fn(recipeList, element)
+            let rlt = fn(recipeList, element.textContent.toLowerCase())
             responses.push(rlt)
         }
     
