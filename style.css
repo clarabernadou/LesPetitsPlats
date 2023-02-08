@@ -290,6 +290,10 @@ li {
 /* MEDIA QUERIES */
 
 @media screen and (max-width: 430px){
+    .input-btn {
+        width: 75%;
+    }
+    
     .header,
     .card_section {
         padding: 0 20px;    
