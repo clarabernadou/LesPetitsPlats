@@ -167,7 +167,7 @@ function filterRecipes() {
     let keptRecipes = []
 
     // Filter recipes with tags
-    for(let recipe of recipes){
+    for(let recipe of recipesFound){
         const ustensil = extractUstensils(recipe)
 
         const keepRecipeIngredients = customEvery(tagsIngredient, isInList, recipe.ingredient)
