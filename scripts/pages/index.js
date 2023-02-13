@@ -122,71 +122,41 @@ function filterRecipes() {
     let searchBar = document.querySelector('.search_bar')
     let search = searchBar.value.toLowerCase()
 
-    let recipesFound = []
+    let recipesFound = new Set()
+    let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
+    let tagsIngredient = Array.from(document.querySelectorAll(".tag_ingredient")).map(t => t.textContent.toLowerCase())
+    let tagsAppliances = Array.from(document.querySelectorAll(".tag_appliance")).map(t => t.textContent.toLowerCase())
+    let tagsUstensils = Array.from(document.querySelectorAll(".tag_ustensil")).map(t => t.textContent.toLowerCase())
 
-    let tags = Array.from(document.querySelectorAll(".tag"))
-    let tagsIngredient = Array.from(document.querySelectorAll(".tag_ingredient"))
-    let tagsAppliances = Array.from(document.querySelectorAll(".tag_appliance"))
-    let tagsUstensils = Array.from(document.querySelectorAll(".tag_ustensil"))
-
-    // If there is no search or tag
     if(!tags.length && search == undefined){
         return recipes
     }
-
-    // Filter recipes with a search
-    for(let recipe of recipes){
+        
+    recipesFound = recipes.filter(recipe => {
         const name = recipe.name.toLowerCase()
         const description = recipe.description.toLowerCase()
-        if(name.indexOf(search) >= 0 || description.indexOf(search) >= 0 || recipe.ingredient.indexOf(search) >= 0){
-            recipesFound.push(recipe)
-        }       
-    }
+        return (
+            name.includes(search) ||
+            description.includes(search) ||
+            recipe.ingredient.includes(search)
+        )
+    })
 
-    // Iterate on each element of the list
-    function customEvery(list, fn, recipeList){
-        let responses = []
-    
-        for(let element of list){
-            let rlt = fn(recipeList, element.textContent.toLowerCase())
-            responses.push(rlt)
-        }
-    
-        for(let r of responses){
-            if(!r){ return false }
-        }
-        return true
-    }
-
-    // Do the elements appear in the recipes ?
-    function isInList(list, element){
-        if(list.indexOf(element) >= 0){ return true }
-        return false
-    }
-
-    let keptRecipes = []
-
-    // Filter recipes with tags
-    for(let recipe of recipesFound){
-        const ustensil = extractUstensils(recipe)
-
-        const keepRecipeIngredients = customEvery(tagsIngredient, isInList, recipe.ingredient)
-        const keepRecipeAppliances = customEvery(tagsAppliances, isInList, recipe.appliance.toLowerCase())
-        const keepRecipeUstensils = customEvery(tagsUstensils, isInList, ustensil)
-
-        if(keepRecipeIngredients && keepRecipeAppliances && keepRecipeUstensils){
-            keptRecipes.push(recipe)
-        }
-    }
-
-    // If there are tags, put the result of keepRecipes in recipesFound to display it.
     if(tags.length){
-        recipesFound = keptRecipes        
+        if(!tags.length){ return recipes }
+        recipesFound = recipesFound.filter(recipe => {
+            let ustensils = extractUstensils(recipe)
+            return (
+                tagsIngredient.every(t => recipe.ingredient.includes(t)) &&
+                tagsAppliances.every(t => recipe.appliance.toLowerCase().includes(t)) &&
+                tagsUstensils.every(t => ustensils.includes(t))
+            )
+        })         
     }
-
-    // return recipes
+    
     return recipesFound
 }
+
 
 function initRecipes(){
     let searchBar = document.querySelector('.search_bar')
@@ -209,6 +179,8 @@ function initRecipes(){
         if(!recipesFound.length){
             noRecipesFound()
         }
+
+        //debugger
 
         // If we search recipes, the list of ingredients is filtered
         retrieveIngredientInformation(recipesFound)
@@ -241,8 +213,8 @@ function initTagItems(searchBar, elements, tagClass, tagColor){
 
 // Display elements for tags in DOM
 function displayTagItemsInDOM(elements, list){
-    let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
     list.innerHTML = ''
+    let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
     elements.forEach(element => {
         if(tags.includes(element)){
             console.log('This tag is already in use');
