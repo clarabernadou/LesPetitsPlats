@@ -290,6 +290,7 @@ li {
 /* MEDIA QUERIES */
 
 @media screen and (max-width: 430px){
+
     .input-btn {
         width: 75%;
     }
@@ -298,11 +299,25 @@ li {
     .card_section {
         padding: 0 20px;    
     }
+
+    .search_bar{
+        height: 4em;
+    }
+
+    .search_section i {
+        padding: 31px;
+    }
     
     .ingredients_list,
     .appliances_list,
     .ustensils_list {
         width: 400px;
+    }
+
+    .align-ingredients-list,
+    .align-appliances-list,
+    .align-ustensils-list {
+        column-count: 2;
     }
 
     .card_section {
@@ -317,6 +332,19 @@ li {
 
     .recipe_card img {
         height: 150px;
+    }
+
+    .card_content,
+    .input-btn {
+        font-size: 18px;
+    }
+
+    .search_bar,
+    .container input,
+    .card_header,
+    i,
+    button h2 {
+        font-size: 20px;
     }
 }
 
@@ -393,17 +421,13 @@ li {
     }
 }
 
-@media screen and (max-height: 930px) and (orientation: landscape){
-    .header img {
-        height: 133px;
-    }
-
+@media screen and (max-height: 430px) and (orientation: landscape){
     .search_bar,
     .container input,
     .card_header,
     i,
     button h2 {
-        font-size: 25px;
+        font-size: 20px;
     }
 
     .search_bar {
@@ -411,7 +435,7 @@ li {
     }
 
     .search_section i {
-        padding: 41px;
+        padding: 31px;
     }
 
     .button {
@@ -430,5 +454,13 @@ li {
 
     .card_main p {
         -webkit-line-clamp: 6;
+    }
+
+    .card_section {
+        flex-direction: row;
+    }
+
+    .recipe_card {
+        width: 48%;
     }
 }
