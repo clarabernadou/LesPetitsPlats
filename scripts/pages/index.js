@@ -188,25 +188,16 @@ function filterRecipes() {
     return recipesFound
 }
 
-function initRecipes(recipes){
+function initRecipes(){
     let searchBar = document.querySelector('.search_bar')
-    const tagSection = document.querySelector('.tag_section')
 
     searchBar.addEventListener('input', function(e){
         let search = searchBar.value.toLowerCase()
         let recipesFound = filterRecipes()
 
-        // Condition to remove tags
-        if(search.length){
-            tagSection.innerHTML = ''
-            displayData(recipesFound)
-        }
-
         // Condition to launch the search from 3 characters entered
         if(search.length >= 3){
             displayData(recipesFound)
-        }else{
-            displayData(recipes)
         }
 
         // Condition to launch a message if no recipe is found
