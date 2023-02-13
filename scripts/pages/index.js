@@ -161,29 +161,30 @@ function filterRecipes() {
 
 function initRecipes(recipes){
     let searchBar = document.querySelector('.search_bar')
-    const tagSection = document.querySelector('.tag_section')
+    const tags = document.querySelectorAll(".tag")
 
     searchBar.addEventListener('input', function(e){
         let search = searchBar.value.toLowerCase()
         let recipesFound = filterRecipes()
 
-        // Condition to remove tags
-        if(search.length){
-            tagSection.innerHTML = ''
-            displayData(recipesFound)
-        }
-
         // Condition to launch the search from 3 characters entered
         if(search.length >= 3){
             displayData(recipesFound)
-        }else{
-            displayData(recipes)
         }
+
+        // Condition if there are tags
+        if(!search.length){
+            displayData(recipesFound)
+        }
+
+        console.log(recipesFound);
 
         // Condition to launch a message if no recipe is found
         if(!recipesFound.length){
             noRecipesFound()
         }
+
+        //debugger
 
         // If we search recipes, the list of ingredients is filtered
         retrieveIngredientInformation(recipesFound)
