@@ -183,6 +183,9 @@ function filterRecipes() {
     if(tags.length){
         recipesFound = keptRecipes        
     }
+    
+    return recipesFound
+}
 
     // return recipes
     return recipesFound
@@ -209,6 +212,8 @@ function initRecipes(){
         if(!recipesFound.length){
             noRecipesFound()
         }
+
+        //debugger
 
         // If we search recipes, the list of ingredients is filtered
         retrieveIngredientInformation(recipesFound)
