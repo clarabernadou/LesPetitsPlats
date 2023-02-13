@@ -200,6 +200,11 @@ function initRecipes(){
             displayData(recipesFound)
         }
 
+        // Condition if there are tags
+        if(!search.length){
+            displayData(recipesFound)
+        }
+
         // Condition to launch a message if no recipe is found
         if(!recipesFound.length){
             noRecipesFound()
