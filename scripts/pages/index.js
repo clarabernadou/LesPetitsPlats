@@ -153,15 +153,13 @@ function filterRecipes() {
             )
         })         
     }
-
-    console.log(recipesFound)
+    
     return recipesFound
 }
 
 
-function initRecipes(recipes){
+function initRecipes(){
     let searchBar = document.querySelector('.search_bar')
-    const tags = document.querySelectorAll(".tag")
 
     searchBar.addEventListener('input', function(e){
         let search = searchBar.value.toLowerCase()
@@ -176,8 +174,6 @@ function initRecipes(recipes){
         if(!search.length){
             displayData(recipesFound)
         }
-
-        console.log(recipesFound);
 
         // Condition to launch a message if no recipe is found
         if(!recipesFound.length){

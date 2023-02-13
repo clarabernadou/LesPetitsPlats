@@ -277,7 +277,7 @@ li {
 .card_main p {
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 7;
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
     font-family:  'Roboto';
@@ -390,5 +390,45 @@ li {
 
     .card_header {
         font-size: 12px;
+    }
+}
+
+@media screen and (max-height: 930px) and (orientation: landscape){
+    .header img {
+        height: 133px;
+    }
+
+    .search_bar,
+    .container input,
+    .card_header,
+    i,
+    button h2 {
+        font-size: 25px;
+    }
+
+    .search_bar {
+        height: 4em;
+    }
+
+    .search_section i {
+        padding: 41px;
+    }
+
+    .button {
+        width: 230px;
+        height: 90px;
+    }
+
+    .input-btn {
+        width: 100%;
+    }
+
+    .card_content,
+    .input-btn {
+        font-size: 18px;
+    }
+
+    .card_main p {
+        -webkit-line-clamp: 6;
     }
 }
