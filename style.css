@@ -105,6 +105,8 @@ body {
 
 .container_display_none button{
     display: none;
+    position: absolute;
+    width: 60%;
 }
 
 button h2 {

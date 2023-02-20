@@ -77,12 +77,20 @@ function displayBtn(recipes){
 function setSearchEvent(){
     const allMainBtn = document.querySelectorAll('.button')
     const allIconUp = document.querySelectorAll('.fa-chevron-up')
+    const allSearchBtn = document.querySelectorAll('.input-btn')
         
     allMainBtn.forEach(mainBtn => {
         const container = mainBtn.closest('.container')
         const searchBtn = container.querySelector('.input-btn')
 
         mainBtn.addEventListener('click', function(e){
+            allSearchBtn.forEach(searchBtn => {
+                searchBtn.style.display = 'none'
+            })
+            allMainBtn.forEach(mainBtn => {
+                mainBtn.style.display = 'flex'
+            })
+            
             mainBtn.style.display = 'none'
             searchBtn.style.display = 'flex'
         })
