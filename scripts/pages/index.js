@@ -184,7 +184,7 @@ function initRecipes(){
         }
 
         // Condition to launch a message if no recipe is found
-        if(!recipesFound.length){
+        if(!recipesFound.length && search.length >= 3){
             noRecipesFound()
         }
 

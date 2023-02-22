@@ -184,6 +184,7 @@ button h2 {
 
 .card_section {
     display: flex;
+    width: -webkit-fill-available;
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
