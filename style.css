@@ -186,6 +186,7 @@ button h2 {
     display: flex;
     width: -webkit-fill-available;
     justify-content: center;
+    width: -webkit-fill-available;
     align-items: flex-start;
     flex-wrap: wrap;
     padding: 0 100px;
