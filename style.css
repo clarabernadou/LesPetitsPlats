@@ -305,6 +305,7 @@ li {
     .header,
     .card_section {
         padding: 0 20px;    
+        top: 470px;
     }
 
     .search_bar{
@@ -338,7 +339,7 @@ li {
     }
 
     .recipe_card img {
-        height: 150px;
+        height: 200px;
     }
 
     .card_content,
